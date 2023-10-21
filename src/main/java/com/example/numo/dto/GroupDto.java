@@ -22,7 +22,6 @@ public class GroupDto {
     private Integer dislikesMoreThan;
     private Boolean hasFinishedRegisterForm;
     private ActivityLevel activityLevel;
-
     private String registeredFrom;
     private String registeredTo;
 }

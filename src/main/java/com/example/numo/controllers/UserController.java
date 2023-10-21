@@ -3,6 +3,7 @@ package com.example.numo.controllers;
 import com.example.numo.dto.Bucket;
 import com.example.numo.dto.GroupDto;
 import com.example.numo.entities.elastic.UserES;
+import com.example.numo.services.GroupService;
 import com.example.numo.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final GroupService groupService;
 
     @GetMapping(value = ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserES>> getUsers() {
@@ -83,33 +85,33 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsersByGroup(dto), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/aggs/subscription" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, List<Bucket>>> aggsSubscription(@RequestBody GroupDto dto) {
-        return new ResponseEntity<>(userService.getAggregateSubscribeUnsubscribeStatByGroup(dto), HttpStatus.OK);
+    @PostMapping(value = "/aggs"+ ControllerAPI.CONTROLLER_SPECIFIC_REQUEST + "/subscription" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsSubscription(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getAggregateSubscribeUnsubscribeStatByGroup(groupService.getGroupDtoById(id)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/aggs/sources" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, List<Bucket>>> aggsSources(@RequestBody GroupDto dto) {
-        return new ResponseEntity<>(userService.aggregateUsersBySource(dto), HttpStatus.OK);
+    @PostMapping(value = "/aggs"+ ControllerAPI.CONTROLLER_SPECIFIC_REQUEST + "/sources" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsSources(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.aggregateUsersBySource(groupService.getGroupDtoById(id)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/aggs/activity" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, List<Bucket>>> aggsActivity(@RequestBody GroupDto dto) {
-        return new ResponseEntity<>(userService.aggregateUsersActivityByGroup(dto), HttpStatus.OK);
+    @PostMapping(value = "/aggs" + ControllerAPI.CONTROLLER_SPECIFIC_REQUEST + "/activity", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsActivity(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.aggregateUsersActivityByGroup(groupService.getGroupDtoById(id)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/aggs/likesactivity" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, List<Bucket>>> aggsLikesActivity(@RequestBody GroupDto dto) {
-        return new ResponseEntity<>(userService.aggregateLikesActivity(dto), HttpStatus.OK);
+    @PostMapping(value = "/aggs" + ControllerAPI.CONTROLLER_SPECIFIC_REQUEST + "/likesactivity", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsLikesActivity(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.aggregateLikesActivity(groupService.getGroupDtoById(id)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/aggs/dislikesactivity" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, List<Bucket>>> aggsDislikesActivity(@RequestBody GroupDto dto) {
-        return new ResponseEntity<>(userService.aggregateDislikesActivity(dto), HttpStatus.OK);
+    @PostMapping(value = "/aggs"+ ControllerAPI.CONTROLLER_SPECIFIC_REQUEST + "/dislikesactivity" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsDislikesActivity(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.aggregateDislikesActivity(groupService.getGroupDtoById(id)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/aggs/topEvents" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, List<Bucket>>> aggsTopEvents(@RequestBody GroupDto dto) {
-        return new ResponseEntity<>(userService.aggregateTopEventsByGroup(dto), HttpStatus.OK);
+    @PostMapping(value = "/aggs"+ ControllerAPI.CONTROLLER_SPECIFIC_REQUEST + "/topEvents" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsTopEvents(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.aggregateTopEventsByGroup(groupService.getGroupDtoById(id)), HttpStatus.OK);
     }
 }

@@ -33,6 +33,10 @@ public class GroupService {
         return groupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found group with such id"));
     }
 
+    public GroupDto getGroupDtoById(Long id){
+        return groupMapper.toDto(groupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found group with such id")));
+    }
+
     public Group removeGroup(Long id){
         Optional<Group> groupForRemoving = groupRepository.findById(id);
         if (groupForRemoving.isEmpty()){

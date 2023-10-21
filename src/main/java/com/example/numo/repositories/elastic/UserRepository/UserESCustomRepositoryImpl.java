@@ -270,4 +270,6 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
 
         return Map.of("activity", buckets.stream().map(b -> new Bucket(b.key().stringValue(), b.docCount())).toList());
     }
+
+    
 }
