@@ -12,8 +12,9 @@ import java.time.ZonedDateTime;
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ScheduleDto {
-    private ZonedDateTime createdAt;
+    private String Name;
+    private String createdAt;
     private Long groupId;
     private CommunicationType communicationType;
-    private ZonedDateTime scheduledTime;
+    private String scheduledTime;
 }

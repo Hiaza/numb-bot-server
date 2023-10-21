@@ -7,8 +7,6 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import java.time.ZonedDateTime;
-
 @Document(indexName = "schedules")
 @Accessors(chain = true)
 @Data
@@ -16,8 +14,9 @@ public class Schedule {
     @Id
     @GeneratedValue
     private Long id;
-    private ZonedDateTime createdAt;
+    private String Name;
+    private String createdAt;
     private Long groupId;
     private CommunicationType communicationType;
-    private ZonedDateTime scheduledTime;
+    private String scheduledTime;
 }

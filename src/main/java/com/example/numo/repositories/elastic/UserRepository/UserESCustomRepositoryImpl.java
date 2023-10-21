@@ -77,23 +77,23 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
         if (group.getNumOfChildren() != null) {
             queryBuilder.must(QueryBuilders.match(q -> q.field("num_of_children").query(group.getNumOfChildren())));
         }
-        if (group.getLikesMoreThan()!=null){
+        if (group.getLikesMoreThan() != null) {
             queryBuilder.must(QueryBuilders.range(q -> q.field("like_count").gte(JsonData.of(group.getLikesMoreThan()))));
         }
-        if (group.getDislikesMoreThan()!=null){
+        if (group.getDislikesMoreThan() != null) {
             queryBuilder.must(QueryBuilders.range(q -> q.field("dislike_count").gte(JsonData.of(group.getDislikesMoreThan()))));
         }
-        if (group.getDislikesMoreThan()!=null){
+        if (group.getDislikesMoreThan() != null) {
             queryBuilder.must(QueryBuilders.range(q -> q.field("dislike_count").gte(JsonData.of(group.getDislikesMoreThan()))));
         }
-        if (group.getRegisteredFrom()!=null){
+        if (group.getRegisteredFrom() != null) {
             queryBuilder.must(QueryBuilders.range(q -> q.field("created_at").gte(JsonData.of(group.getRegisteredFrom()))));
         }
-        if (group.getRegisteredTo()!=null){
+        if (group.getRegisteredTo() != null) {
             queryBuilder.must(QueryBuilders.range(q -> q.field("created_at").lte(JsonData.of(group.getRegisteredTo()))));
         }
-        if (group.getActivityLevel()!=null){
-            switch (group.getActivityLevel()){
+        if (group.getActivityLevel() != null) {
+            switch (group.getActivityLevel()) {
                 case WEEK -> {
                     DateTime req = DateTime.of(ZonedDateTime.now().minusDays(7));
                     queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
@@ -110,7 +110,7 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
                     DateTime req = DateTime.of(ZonedDateTime.now().minusDays(31));
                     queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
                 }
-                case ONCE_PER_THREE_MONTH ->{
+                case ONCE_PER_THREE_MONTH -> {
                     DateTime req = DateTime.of(ZonedDateTime.now().minusDays(90));
                     queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
                 }
@@ -129,15 +129,11 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
     @Override
     public Map<String, List<Bucket>> aggregateSubscribeUnsubscribeStatByGroup(Group group) {
         final BoolQuery.Builder queryBuilder = getBasicGroupQuery(group);
-
         Aggregation agg = new Aggregation.Builder().terms(new TermsAggregation.Builder().field("is_subscribed").build()).build();
 
         NativeQuery query = new NativeQueryBuilder()
-//                .withQuery(queryBuilder.build()._toQuery())
+                .withQuery(queryBuilder.build()._toQuery())
                 .withAggregation("is_subscribed", agg).build();
-//        System.out.println(query.getQuery());
-        System.out.println(query.getAggregations());
-
         SearchHits<UserES> searchHits = esOperations.search(query, UserES.class, IndexCoordinates.of("search-users"));
 
         ElasticsearchAggregations aggregations = (ElasticsearchAggregations) searchHits.getAggregations();
@@ -151,16 +147,13 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
     @Override
     public Map<String, List<Bucket>> aggregateUsersBySource(Group group) {
         final BoolQuery.Builder queryBuilder = getBasicGroupQuery(group);
-
         Aggregation agg = new Aggregation.Builder().terms(new TermsAggregation.Builder().field("utm_source.enum").build()).build();
 
         NativeQuery query = new NativeQueryBuilder()
-//                .withQuery(queryBuilder.build()._toQuery())
+                .withQuery(queryBuilder.build()._toQuery())
                 .withAggregation("sources", agg).build();
-//        System.out.println(query.getQuery());
-        System.out.println(query.getAggregations());
-
         SearchHits<UserES> searchHits = esOperations.search(query, UserES.class, IndexCoordinates.of("search-users"));
+
         ElasticsearchAggregations aggregations = (ElasticsearchAggregations) searchHits.getAggregations();
         Map<String, ElasticsearchAggregation> aggMap = aggregations.aggregationsAsMap();
         List<StringTermsBucket> buckets = aggMap.get("sources").aggregation().getAggregate().sterms().buckets().array();
@@ -172,7 +165,7 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
     private List<Long> getFilteredUserIdsByGroup(Group group) {
         final BoolQuery.Builder queryBuilder = getBasicGroupQuery(group);
         NativeQuery query = new NativeQueryBuilder()
-//                .withQuery(queryBuilder.build()._toQuery())
+                .withQuery(queryBuilder.build()._toQuery())
                 .build();
         List<SearchHit<UserES>> searchHits = esOperations.search(query, UserES.class, IndexCoordinates.of("search-users")).getSearchHits();
         return searchHits.stream().map(SearchHit::getId).map(v -> {
@@ -216,7 +209,6 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
         final BoolQuery.Builder queryBuilder = QueryBuilders.bool();
         queryBuilder.must(getEventsByUserUdsByGroup(userIds).build()._toQuery());
         queryBuilder.must(QueryBuilders.term().field("e_type.enum").value("subskill-reaction-like").build()._toQuery());
-
 
         Aggregation agg = new Aggregation.Builder().dateHistogram(new DateHistogramAggregation.Builder().field("timestamp").calendarInterval(CalendarInterval.Day).build()).build();
 
