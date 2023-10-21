@@ -6,6 +6,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField;
+import co.elastic.clients.json.JsonData;
 import com.example.numo.dto.Bucket;
 import com.example.numo.entities.elastic.EventES;
 import com.example.numo.entities.elastic.Group;
@@ -33,27 +34,7 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
     private ElasticsearchOperations esOperations;
 
     public List<UserES> findAllFromGroup(Group group) {
-        final BoolQuery.Builder queryBuilder = QueryBuilders.bool();
-//        queryBuilder.must(QueryBuilders.matchQuery("name", "A"));
-        if (group.getLocation() != null) {
-            queryBuilder.must(QueryBuilders.match(q -> q.field("location").query(group.getLocation())));
-        }
-        if (group.getAge() != null) {
-            queryBuilder.must(QueryBuilders.match(q -> q.field("children.age").query(group.getAge())));
-        }
-        if (group.getFrequency() != null) {
-            queryBuilder.must(QueryBuilders.match(q -> q.field("notification_period").query(group.getFrequency().name().toLowerCase())));
-        }
-        if (group.getOrigin() != null) {
-            queryBuilder.must(QueryBuilders.match(q -> q.field("bot_type").query(group.getOrigin().name().toLowerCase())));
-        }
-        if (group.getHasFinishedRegisterForm() != null) {
-            queryBuilder.must(QueryBuilders.match(q -> q.field("active_survey").query(group.getHasFinishedRegisterForm())));
-        }
-        if (group.getNumOfChildren() != null) {
-            queryBuilder.must(QueryBuilders.match(q -> q.field("num_of_children").query(group.getNumOfChildren())));
-        }
-
+        final BoolQuery.Builder queryBuilder = getBasicGroupQuery(group);
 
 //        RangeQueryBuilder availability = QueryBuilders.rangeQuery("children.age")
 //            .gte(query.getStartDate())
@@ -98,6 +79,22 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
         if (group.getNumOfChildren() != null) {
             queryBuilder.must(QueryBuilders.match(q -> q.field("num_of_children").query(group.getNumOfChildren())));
         }
+        if (group.getLikesMoreThan()!=null){
+            queryBuilder.must(QueryBuilders.range(q -> q.field("like_count").gte(JsonData.of(group.getLikesMoreThan()))));
+        }
+        if (group.getDislikesMoreThan()!=null){
+            queryBuilder.must(QueryBuilders.range(q -> q.field("dislike_count").gte(JsonData.of(group.getDislikesMoreThan()))));
+        }
+        if (group.getDislikesMoreThan()!=null){
+            queryBuilder.must(QueryBuilders.range(q -> q.field("dislike_count").gte(JsonData.of(group.getDislikesMoreThan()))));
+        }
+        if (group.getRegisteredFrom()!=null){
+            queryBuilder.must(QueryBuilders.range(q -> q.field("created_at").gte(JsonData.of(group.getRegisteredFrom()))));
+        }
+        if (group.getRegisteredTo()!=null){
+            queryBuilder.must(QueryBuilders.range(q -> q.field("created_at").lte(JsonData.of(group.getRegisteredTo()))));
+        }
+
 
         return queryBuilder;
     }

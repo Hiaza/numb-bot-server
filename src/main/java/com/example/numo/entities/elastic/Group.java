@@ -22,7 +22,16 @@ public class Group {
     private String location;
     private AmountOfAdvices frequency;
     private Integer numOfChildren;
-    private Boolean activeLiker;
+    private Integer likesMoreThan;
+    private Integer dislikesMoreThan;
     private Boolean hasFinishedRegisterForm;
     private ActivityLevel activityLevel;
+
+//    @JsonSerialize(using = DateSerializer.class)
+//    @JsonDeserialize(using = DateDeserializer.class)
+    private String registeredFrom;
+
+//    @JsonSerialize(using = DateSerializer.class)
+//    @JsonDeserialize(using = DateDeserializer.class)
+    private String registeredTo;
 }

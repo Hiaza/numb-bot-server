@@ -23,6 +23,9 @@ public class UserES {
     private List<EventES> events;
     private String notification_period;
 
+    private Long like_count;
+    private Long dislike_count;
+
 //    @JsonSerialize(using = DateSerializer.class)
 //    @JsonDeserialize(using = DateDeserializer.class)
 //    @Field(type = FieldType.Date, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX||yyyy-MM-dd'T'HH:mm:ss.SSS", format = {})

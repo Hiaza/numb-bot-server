@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+
 @Data
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -17,7 +18,11 @@ public class GroupDto {
     private String location;
     private AmountOfAdvices frequency;
     private Integer numOfChildren;
-    private Boolean activeLiker;
+    private Integer likesMoreThan;
+    private Integer dislikesMoreThan;
     private Boolean hasFinishedRegisterForm;
     private ActivityLevel activityLevel;
+
+    private String registeredFrom;
+    private String registeredTo;
 }
