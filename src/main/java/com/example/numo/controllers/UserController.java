@@ -53,4 +53,19 @@ public class UserController {
     public ResponseEntity<Map<String, List<Bucket>>> aggsActivity(@RequestBody GroupDto dto) {
         return new ResponseEntity<>(userService.aggregateUsersActivityByGroup(dto), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/aggs/likesactivity" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsLikesActivity(@RequestBody GroupDto dto) {
+        return new ResponseEntity<>(userService.aggregateLikesActivity(dto), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/aggs/dislikesactivity" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsDislikesActivity(@RequestBody GroupDto dto) {
+        return new ResponseEntity<>(userService.aggregateDislikesActivity(dto), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/aggs/topEvents" + ControllerAPI.CONTROLLER_GENERAL_REQUEST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, List<Bucket>>> aggsTopEvents(@RequestBody GroupDto dto) {
+        return new ResponseEntity<>(userService.aggregateTopEventsByGroup(dto), HttpStatus.OK);
+    }
 }

@@ -46,4 +46,16 @@ public class UserService {
     public Map<String, List<Bucket>> aggregateUsersActivityByGroup(GroupDto dto) {
         return userESRepository.aggregateActivityByGroup(groupMapper.toModel(dto));
     }
+
+    public Map<String, List<Bucket>> aggregateLikesActivity(GroupDto dto) {
+        return userESRepository.aggregateLikesActivityByGroup(groupMapper.toModel(dto));
+    }
+
+    public Map<String, List<Bucket>> aggregateDislikesActivity(GroupDto dto) {
+        return userESRepository.aggregateDislikesActivityByGroup(groupMapper.toModel(dto));
+    }
+
+    public Map<String, List<Bucket>> aggregateTopEventsByGroup(GroupDto dto) {
+        return userESRepository.aggregateTopEventsByGroup(groupMapper.toModel(dto));
+    }
 }

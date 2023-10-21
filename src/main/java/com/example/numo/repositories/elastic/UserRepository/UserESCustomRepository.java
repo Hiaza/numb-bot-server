@@ -15,4 +15,10 @@ public interface UserESCustomRepository {
     Map<String, List<Bucket>> aggregateUsersBySource(Group group);
 
     Map<String, List<Bucket>> aggregateActivityByGroup(Group group);
+
+    Map<String, List<Bucket>> aggregateLikesActivityByGroup(Group group);
+
+    Map<String, List<Bucket>> aggregateDislikesActivityByGroup(Group group);
+
+    Map<String, List<Bucket>> aggregateTopEventsByGroup(Group group);
 }
