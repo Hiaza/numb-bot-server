@@ -27,11 +27,6 @@ public class Group {
     private Boolean hasFinishedRegisterForm;
     private ActivityLevel activityLevel;
 
-//    @JsonSerialize(using = DateSerializer.class)
-//    @JsonDeserialize(using = DateDeserializer.class)
     private String registeredFrom;
-
-//    @JsonSerialize(using = DateSerializer.class)
-//    @JsonDeserialize(using = DateDeserializer.class)
     private String registeredTo;
 }

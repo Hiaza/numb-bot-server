@@ -7,6 +7,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField;
 import co.elastic.clients.json.JsonData;
+import co.elastic.clients.util.DateTime;
 import com.example.numo.dto.Bucket;
 import com.example.numo.entities.elastic.EventES;
 import com.example.numo.entities.elastic.Group;
@@ -23,6 +24,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +91,35 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
         }
         if (group.getRegisteredTo()!=null){
             queryBuilder.must(QueryBuilders.range(q -> q.field("created_at").lte(JsonData.of(group.getRegisteredTo()))));
+        }
+        if (group.getActivityLevel()!=null){
+            switch (group.getActivityLevel()){
+                case WEEK -> {
+                    DateTime req = DateTime.of(ZonedDateTime.now().minusDays(7));
+                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
+                }
+                case TWO_WEEKS -> {
+                    DateTime req = DateTime.of(ZonedDateTime.now().minusDays(14));
+                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
+                }
+                case THREE_WEEKS -> {
+                    DateTime req = DateTime.of(ZonedDateTime.now().minusDays(21));
+                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
+                }
+                case ONCE_PER_MONTH -> {
+                    DateTime req = DateTime.of(ZonedDateTime.now().minusDays(31));
+                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
+                }
+                case ONCE_PER_THREE_MONTH ->{
+                    DateTime req = DateTime.of(ZonedDateTime.now().minusDays(90));
+                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
+                }
+                case MISSING -> {
+                    DateTime req = DateTime.of(ZonedDateTime.now().minusDays(90));
+                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").lte(JsonData.of(req))));
+                }
+            }
+
         }
 
 
