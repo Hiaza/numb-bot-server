@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ScheduleDto {
     private String Name;
-    private String createdAt;
     private Long groupId;
     private CommunicationType communicationType;
     private String scheduledTime;
