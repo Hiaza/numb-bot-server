@@ -1,16 +1,12 @@
 package com.example.numo.services;
 
-import co.elastic.clients.elasticsearch._types.aggregations.LongTermsBucket;
 import com.example.numo.dto.Bucket;
 import com.example.numo.dto.GroupDto;
-import com.example.numo.entities.elastic.Group;
 import com.example.numo.entities.elastic.UserES;
 import com.example.numo.mappers.GroupMapper;
 import com.example.numo.repositories.elastic.UserRepository.UserESRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +30,19 @@ public class UserService {
     public List<UserES> getUsersByGroup(GroupDto dto) {
         return userESRepository.findAllFromGroup(groupMapper.toModel(dto));
     }
+
+    public List<UserES> getUsers() {
+        return userESRepository.findAll();
+    }
+
+    public UserES getUserById(Long id) {
+        return userESRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found user with such id"));
+    }
+
+    public UserES saveUserGroup(Long id) {
+        return userESRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found user with such id"));
+    }
+
 
     public Map<String, List<Bucket>> getAggregateSubscribeUnsubscribeStatByGroup(GroupDto dto) {
         return userESRepository.aggregateSubscribeUnsubscribeStatByGroup(groupMapper.toModel(dto));

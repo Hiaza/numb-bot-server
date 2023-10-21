@@ -1,7 +1,13 @@
 package com.example.numo.repositories.elastic.UserRepository;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
-import co.elastic.clients.elasticsearch._types.aggregations.*;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import co.elastic.clients.elasticsearch._types.aggregations.CalendarInterval;
+import co.elastic.clients.elasticsearch._types.aggregations.DateHistogramAggregation;
+import co.elastic.clients.elasticsearch._types.aggregations.DateHistogramBucket;
+import co.elastic.clients.elasticsearch._types.aggregations.LongTermsBucket;
+import co.elastic.clients.elasticsearch._types.aggregations.StringTermsBucket;
+import co.elastic.clients.elasticsearch._types.aggregations.TermsAggregation;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
@@ -13,7 +19,6 @@ import com.example.numo.entities.elastic.EventES;
 import com.example.numo.entities.elastic.Group;
 import com.example.numo.entities.elastic.UserES;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -25,7 +30,6 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -116,7 +120,7 @@ public class UserESCustomRepositoryImpl implements UserESCustomRepository {
                 }
                 case MISSING -> {
                     DateTime req = DateTime.of(ZonedDateTime.now().minusDays(90));
-                    queryBuilder.must(QueryBuilders.range(q -> q.field("events.timestamp").lte(JsonData.of(req))));
+                    queryBuilder.mustNot(QueryBuilders.range(q -> q.field("events.timestamp").gte(JsonData.of(req))));
                 }
             }
 

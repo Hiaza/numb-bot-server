@@ -25,11 +25,8 @@ public class UserES {
 
     private Long like_count;
     private Long dislike_count;
+    private Long num_of_children;
 
-//    @JsonSerialize(using = DateSerializer.class)
-//    @JsonDeserialize(using = DateDeserializer.class)
-//    @Field(type = FieldType.Date, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX||yyyy-MM-dd'T'HH:mm:ss.SSS", format = {})
-//    @ValueConverter(CustomZonedDateTimeConverter.class)
     private String created_at;
 
 }
