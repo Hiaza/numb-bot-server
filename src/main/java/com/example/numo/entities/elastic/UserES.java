@@ -5,7 +5,6 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Document(indexName = "search-users")
@@ -23,6 +22,11 @@ public class UserES {
     private List<ChildES> children;
     private List<EventES> events;
     private String notification_period;
-//    private OffsetDateTime created_at;
+
+//    @JsonSerialize(using = DateSerializer.class)
+//    @JsonDeserialize(using = DateDeserializer.class)
+//    @Field(type = FieldType.Date, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX||yyyy-MM-dd'T'HH:mm:ss.SSS", format = {})
+//    @ValueConverter(CustomZonedDateTimeConverter.class)
+    private String created_at;
 
 }
