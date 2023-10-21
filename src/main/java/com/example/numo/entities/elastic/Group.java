@@ -3,6 +3,7 @@ package com.example.numo.entities.elastic;
 import com.example.numo.entities.enums.ActivityLevel;
 import com.example.numo.entities.enums.AmountOfAdvices;
 import com.example.numo.entities.enums.Origin;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.GeneratedValue;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,6 +16,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 public class Group {
     @Id
     @GeneratedValue
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     private String name;
     private Origin origin;
