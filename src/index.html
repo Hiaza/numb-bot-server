@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    console.log("test")
+    try {
+        fetch('http://localhost:8080/api/v1/groups', {referrerPolicy: "no-referrer"});
+    } catch (err) {
+        alert(err); // Failed to fetch
+    }
+</script>
+</html>
