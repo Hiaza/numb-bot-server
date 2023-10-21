@@ -11,10 +11,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +32,16 @@ public class AppConfig extends WebMvcConfigurationSupport {
             .info(new Info().title("UavSim Instructor service")
                 .description("UavSim Instructor service")
                 .version("Version 0.1"));
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("*").allowedOrigins("*").allowedOriginPatterns("*");
+            }
+        };
     }
 
     @Bean
@@ -58,6 +70,7 @@ public class AppConfig extends WebMvcConfigurationSupport {
         org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource();
         var corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
         corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOrigins(List.of("*"));
         corsConfiguration.setAllowedOriginPatterns(Collections.singletonList("*"));
         corsConfiguration.setAllowedMethods(List.of(HttpMethod.PUT.name(), HttpMethod.POST.name(), HttpMethod.PATCH.name(), HttpMethod.GET.name(), HttpMethod.DELETE.name()));
         source.registerCorsConfiguration("/**", corsConfiguration);
